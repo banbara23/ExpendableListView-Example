@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
+        expandableListView.setGroupIndicator(null); // セクションの上下矢印が消える
+        expandableListView.setChildIndicator(null); // 同様
+
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
             @Override
@@ -62,5 +65,18 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // セクションヘッダー開閉を無効にする
+        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
+                return true; // trueを返すとセクションヘッダーをタップしても開閉しなくなる
+            }
+        });
+
+        // 全グループを最初から展開する処理
+        for (int i = 0; i < expandableListTitle.size(); i++) {
+            expandableListView.expandGroup(i);
+        }
     }
 }
