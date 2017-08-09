@@ -6,4 +6,4 @@ Android ExpandableListView Example Tutorial - JournalDev http://www.journaldev.c
 https://github.com/banbara23/ExpendableListView-Example/tree/non-expand
 
 ## 画面イメージ
-![](https://github.com/banbara23/ExpendableListView-Example/blob/master/Screenshot_1502257957.png)
+<img src="https://github.com/banbara23/ExpendableListView-Example/blob/master/Screenshot_1502257957.png" width="320px">
