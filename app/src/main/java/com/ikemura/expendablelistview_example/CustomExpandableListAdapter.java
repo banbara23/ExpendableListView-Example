@@ -1,12 +1,14 @@
 package com.ikemura.expendablelistview_example;
 
 import android.content.Context;
-import android.graphics.Typeface;
+import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.TextView;
+
+import com.ikemura.expendablelistview_example.databinding.ListGroupBinding;
+import com.ikemura.expendablelistview_example.databinding.ListItemBinding;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +17,8 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> expandableListTitle;
     private HashMap<String, List<String>> expandableListDetail;
+    private ListGroupBinding mParentBinding;
+    private ListItemBinding mChildBinding;
 
     public CustomExpandableListAdapter(Context context, List<String> expandableListTitle,
                                        HashMap<String, List<String>> expandableListDetail) {
@@ -35,17 +39,16 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int listPosition, final int expandedListPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int listPosition, final int expandedListPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final String expandedListText = (String) getChild(listPosition, expandedListPosition);
+
+        LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.list_item, null);
+            mChildBinding = DataBindingUtil.inflate(layoutInflater, R.layout.list_item, parent, false);
+            convertView = mChildBinding.getRoot();
         }
-        TextView expandedListTextView = (TextView) convertView
-                .findViewById(R.id.expandedListItem);
-        expandedListTextView.setText(expandedListText);
+        mChildBinding.setValue(expandedListText);
+
         return convertView;
     }
 
@@ -75,14 +78,10 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
                              View convertView, ViewGroup parent) {
         String listTitle = (String) getGroup(listPosition);
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.list_group, null);
+            mParentBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_group, parent, false);
+            convertView = mParentBinding.getRoot();
         }
-        TextView listTitleTextView = (TextView) convertView
-                .findViewById(R.id.listTitle);
-        listTitleTextView.setTypeface(null, Typeface.BOLD);
-        listTitleTextView.setText(listTitle);
+        mParentBinding.setValue(listTitle);
         return convertView;
     }
 
